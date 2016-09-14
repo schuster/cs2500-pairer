@@ -48,6 +48,6 @@
   [else
    (call-with-output-file (build-path this-dir "pairs.rktd")
      (lambda (pairs-file)
-       (pretty-write (append current-pairs (list (list user1 user2))) pairs-file))
+       (pretty-write (append current-pairs (list (sort (list user1 user2) string<?))) pairs-file))
      #:exists 'truncate)
    (displayln "Your pair has been registered. Thank you!")])
