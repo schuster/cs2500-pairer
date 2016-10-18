@@ -1,3 +1,4 @@
+#!/usr/bin/env racket
 #lang racket
 
 ;; Returns a list of 2-element lists of elements from the given list, with each original element
@@ -21,7 +22,7 @@
             (random-pairs/even rem2))]))
 
 (define (remove-random users)
-  (define to-remove (list-ref users (random 0 (length users))))
+  (define to-remove (list-ref users (random (length users))))
   (list to-remove (remove to-remove users)))
 
 (pretty-write (random-pairs INPUT-GOES-HERE))
