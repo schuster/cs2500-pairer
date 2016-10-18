@@ -11,20 +11,25 @@
 
 (define-runtime-path this-dir ".")
 
-(define all-usernames
+(define (get-user-id user)
+  (symbol->string (first user)))
+
+(define (get-user-name user)
+  (match user
+    [(list _ (list _ name _ _ _)) name]))
+
+(define all-users
   (call-with-input-file (build-path this-dir "users.rktd")
-    (lambda (users-file)
-      (for/list ([user (read users-file)])
-        (symbol->string (first user))))))
+    (lambda (users-file) (read users-file))))
 
 ;; Every "pair" is a list of either one or two username strings
 (define current-pairs (call-with-input-file (build-path this-dir "pairs.rktd") read))
 
-(match (filter (lambda (username) (not (findf (curry member username) current-pairs)))
-               all-usernames)
+(match (filter (lambda (user) (not (findf (curry member (get-user-id user)) current-pairs)))
+               all-users)
   [(list)
    (displayln "All users are registered")]
   [unregistered-users
    (displayln "Users not found in pairs.rktd:")
    (for ([user unregistered-users])
-     (printf "~a\n" user))])
+     (printf "~a (~a)\n" (get-user-id user) (get-user-name user)))])
